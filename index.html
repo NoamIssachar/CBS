@@ -164,50 +164,67 @@
         </div>
       </div>
     </section>
-    <section class="section" id="how-cbs-works">
+<section class="section has-background-light" id="how-cbs-works">
       <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered">How CBS Works?</h2>
+        <h2 class="title is-3 has-text-centered">How CBS Works</h2>
 
-        <div class="content lead-blurb">
-          <p>
-            Deploying a single massive network uniformly across the entire generative timeline is inefficient. The generative process shifts from broad structural formation to high-frequency detail refinement. <strong>CBS</strong> allocates capacity precisely where the dynamics are hardest to model.
-          </p>
+        <div class="columns is-centered mt-4 mb-6">
+          <div class="column is-10 has-text-centered">
+            <p class="is-size-5 has-text-grey-dark">
+              Deploying a single massive network uniformly across the entire generative timeline is inefficient. The generative process shifts from broad structural formation to high-frequency detail refinement. <strong>CBS</strong> dynamically allocates capacity precisely where the generative dynamics are hardest to model.
+            </p>
+          </div>
         </div>
 
-        <div class="columns is-multiline how-cards">
-          <div class="column is-12">
-            <div class="how-card">
-              <h3 class="how-step">1. De Boor's Equidistribution Principle</h3>
-              <p>
-                Instead of heuristic time-splits, we approach timeline partitioning as a domain decomposition problem. Grounded in approximation theory, we partition the diffusion timeline into segments of <strong>equal approximation burden</strong>, ensuring every specialized sub-network faces a comparable representational workload.
+        <div class="columns is-centered is-multiline">
+          
+          <div class="column is-4">
+            <div class="box" style="height: 100%; border-top: 4px solid #3b82f6; display: flex; flex-direction: column;">
+              <div class="has-text-centered mb-4 mt-2">
+                <span class="icon is-large" style="color: #3b82f6;">
+                  <i class="fas fa-balance-scale fa-2x"></i>
+                </span>
+              </div>
+              <h3 class="title is-5 has-text-centered">1. Equidistribution</h3>
+              <p class="has-text-justified" style="flex-grow: 1;">
+                Grounded in <strong>de Boor's Equidistribution Principle</strong>, we treat timeline partitioning as a domain decomposition problem. CBS divides the diffusion timeline into segments of <em>equal approximation burden</em>, ensuring every sub-network faces a comparable workload.
               </p>
             </div>
           </div>
 
-          <div class="column is-12">
-            <div class="how-card">
-              <h3 class="how-step">2. Tractable Complexity Monitors</h3>
-              <p>
-                To measure this approximation burden, we introduce two robust monitor functions:
+          <div class="column is-4">
+            <div class="box" style="height: 100%; border-top: 4px solid #10b981; display: flex; flex-direction: column;">
+              <div class="has-text-centered mb-4 mt-2">
+                <span class="icon is-large" style="color: #10b981;">
+                  <i class="fas fa-chart-area fa-2x"></i>
+                </span>
+              </div>
+              <h3 class="title is-5 has-text-centered">2. Tractable Monitors</h3>
+              <p class="has-text-left">
+                To measure this local approximation burden, we introduce two robust monitor functions:
               </p>
-              <ul class="compact-list">
-                <li><strong>Dirichlet Spectral Energy:</strong> A spatial measure linking the target flow's rapid spatial variations directly to frequency domain complexity via Barron’s error bound.</li>
-                <li><strong>Path Acceleration:</strong> A geometric measure that captures the "curviness" of the sampling trajectories through their second-order time derivative, filtering out constant-velocity displacement.</li>
+              <ul class="mt-3" style="list-style-type: disc; margin-left: 1.5rem; font-size: 0.95rem; flex-grow: 1;">
+                <li class="mb-2"><strong>Dirichlet Energy:</strong> A spatial measure linking rapid flow variations to frequency complexity.</li>
+                <li><strong>Path Acceleration:</strong> A geometric measure capturing the "curviness" of the sampling trajectories.</li>
               </ul>
             </div>
           </div>
 
-          <div class="column is-12">
-            <div class="how-card">
-              <h3 class="how-step">3. Search-Free Specialization</h3>
-              <p>
-                By pre-computing the cumulative complexity using a highly lightweight auxiliary model (e.g., trained for just 50K iterations on 10% of the data), CBS yields the exact optimal boundaries automatically. This completely eliminates the need for exhaustive, computationally expensive boundary search procedures.
+          <div class="column is-4">
+            <div class="box" style="height: 100%; border-top: 4px solid #8b5cf6; display: flex; flex-direction: column;">
+              <div class="has-text-centered mb-4 mt-2">
+                <span class="icon is-large" style="color: #8b5cf6;">
+                  <i class="fas fa-bolt fa-2x"></i>
+                </span>
+              </div>
+              <h3 class="title is-5 has-text-centered">3. Search-Free Splitting</h3>
+              <p class="has-text-justified" style="flex-grow: 1;">
+                By pre-computing the cumulative complexity using a highly lightweight auxiliary model (e.g., trained for just 50K iterations on 10% of the data), CBS yields the optimal boundaries automatically—eliminating the need for computationally expensive heuristic searches.
               </p>
             </div>
           </div>
-        </div>
 
-      </div>
+        </div> </div>
     </section>
     <section class="section" id="results">
       <div class="container is-max-desktop">
