@@ -34,7 +34,7 @@
   <meta name="citation_title" content="Complexity-Balanced Diffusion Splitting">
   <meta name="citation_author" content="Noam Issachar, Dani Lischinski, Raanan Fattal">
   <meta name="citation_publication_date" content="2026">
-  <meta name="citation_conference_title" content="NeurIPS">
+  <meta name="citation_conference_title" content="ArXiv">
 
   <meta name="theme-color" content="#2563eb">
   <meta name="msapplication-TileColor" content="#2563eb">
@@ -93,7 +93,7 @@
               </div>
 
               <div class="is-size-5 publication-authors">
-                <span class="author-block">The Hebrew University of Jerusalem<br>NeurIPS 2026</span>
+                <span class="author-block">The Hebrew University of Jerusalem</span>
               </div>
 
               <div class="column has-text-centered">
@@ -164,7 +164,7 @@
         </div>
       </div>
     </section>
-<section class="section has-background-light" id="how-cbs-works">
+    <section class="section has-background-light" id="how-cbs-works">
       <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered">How CBS Works</h2>
 
@@ -294,6 +294,49 @@
                 <td style="text-align: center;">0.62</td>
                 <td style="text-align: center;">0.51</td>
               </tr>
+
+              <tr>
+                <td colspan="11" style="background-color: #f1f5f9; height: 10px;"></td>
+              </tr>
+              <tr>
+                <td>SiT-B/2 (Baseline)</td>
+                <td style="text-align: center;">130</td>
+                <td style="text-align: center;">23.01</td>
+                <td style="text-align: center;">34.84</td>
+                <td style="text-align: center;">41.53</td>
+                <td style="text-align: center;">0.52</td>
+                <td style="text-align: center;">0.64</td>
+                <td style="text-align: center;">16.79</td>
+                <td style="text-align: center;">84.75</td>
+                <td style="text-align: center;">0.66</td>
+                <td style="text-align: center;">0.55</td>
+              </tr>
+              <tr>
+                <td>SiT-B/2 (Uniform: 0.33, 0.66)</td>
+                <td style="text-align: center;">130</td>
+                <td style="text-align: center;">23.01</td>
+                <td style="text-align: center;">34.52</td>
+                <td style="text-align: center;">41.45</td>
+                <td style="text-align: center;">0.52</td>
+                <td style="text-align: center;">0.64</td>
+                <td style="text-align: center;">16.51</td>
+                <td style="text-align: center;">87.21</td>
+                <td style="text-align: center;">0.66</td>
+                <td style="text-align: center;">0.56</td>
+              </tr>
+              <tr style="font-weight: 600; background-color: #e0f2fe;">
+                <td>SiT-B/2 Ours (0.4, 0.77)</td>
+                <td style="text-align: center;">130</td>
+                <td style="text-align: center;">23.01</td>
+                <td style="text-align: center;">30.51</td>
+                <td style="text-align: center;">52.20</td>
+                <td style="text-align: center;">0.55</td>
+                <td style="text-align: center;">0.65</td>
+                <td style="text-align: center;">10.72</td>
+                <td style="text-align: center;">121.09</td>
+                <td style="text-align: center;">0.72</td>
+                <td style="text-align: center;">0.56</td>
+              </tr>
               
               <tr>
                 <td colspan="11" style="background-color: #f1f5f9; height: 10px;"></td>
@@ -342,19 +385,6 @@
         </div>
       </div>
     </section>
-    <section class="section" id="patent-notice">
-      <div class="container is-max-desktop has-text-centered" style="margin-bottom:-2rem;">
-        <p style="color:#64748b; font-size:0.95rem;">
-          <em>This work is patent pending. For commercial use or licensing inquiries, please contact the
-            <a href="mailto:noam.issachar@mail.huji.ac.il?subject=CBS%20licensing%20inquiry&body=Hi%20Noam%2C%0A%0AI%27m%20reaching%20out%20regarding%20commercial%20use%20of%20CBS.%0A%0ACompany%3A%0AUse%20case%3A%0ATimeline%3A%0A%0AThanks%2C%0A"
-               style="color:#2563eb; text-decoration:underline;">
-              authors
-            </a>.
-          </em>
-        </p>
-      </div>
-    </section>
-
     <section class="section" id="BibTeX">
       <div class="container is-max-desktop content">
         <div class="bibtex-header">
@@ -364,10 +394,9 @@
             <span class="copy-text">Copy</span>
           </button>
         </div>
-        <pre id="bibtex-code"><code>@inproceedings{issachar2026complexity,
+        <pre id="bibtex-code"><code>@misc{issachar2026complexity,
       title={Complexity-Balanced Diffusion Splitting}, 
       author={Noam Issachar and Dani Lischinski and Raanan Fattal},
-      booktitle={Advances in Neural Information Processing Systems (NeurIPS)},
       year={2026},
       url={https://arxiv.org/abs/YOUR_ARXIV_ID}
 }</code></pre>
