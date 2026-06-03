@@ -134,9 +134,9 @@
           <img src="static/images/cbs_unified_deep_blue.gif" alt="Animation comparing Naive Temporal Splitting with Complexity-Balanced Splitting" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
           <div class="content has-text-justified" style="margin-top: 2rem;">
             <p class="is-size-5 has-text-grey-dark">
-              <strong>Uniform time-splitting creates capacity bottlenecks.</strong> Naively splitting the generative timeline creates inefficiency because no individual denoising regime warrants massive capacity on its own. As demonstrated above, naively splitting the diffusion timeline into equal time intervals ($t=0.33, t=0.67$) forces the middle network to bear a massive disproportionate share (65.4%) of the generative workload, while the other networks remain severely underutilized.
+              <strong>Uniform time-splitting creates localized capacity bottlenecks.</strong> Standard diffusion models deploy a single network uniformly across all timesteps, despite the fact that no individual denoising regime warrants such massive capacity on its own. As demonstrated above, naively splitting the diffusion timeline into equal time intervals ($t=0.33, t=0.67$) forces the middle sub-network to bear a disproportionate share (65.4%) of the generative workload, while the other sub-networks remain severely underutilized.
               <br><br>
-              <strong>Complexity-Balanced Splitting (CBS)</strong> solves this by applying de Boor's equidistribution principle to partition the timeline into segments of equal approximation burden. By dynamically shifting the boundaries, CBS ensures each specialized sub-network assumes an identical ~33.3% share of the representational burden, leading to a more uniformly accurate flow field.
+              <strong>Complexity-Balanced Splitting (CBS)</strong> addresses this by applying de Boor's equidistribution principle to partition the diffusion timeline into segments of equal approximation burden. By shifting the boundaries to align with the local modeling complexity, CBS ensures each sub-network assumes an equal share of the representational burden. This minimizes the maximal local approximation errors, leading to a more uniformly accurate flow field and improved sample quality.
             </p>
           </div>
         </div>
@@ -150,7 +150,7 @@
             <h2 class="title is-3">TL;DR</h2>
             <div class="content has-text-justified">
               <p>
-                <strong>Complexity-Balanced Splitting (CBS)</strong> is a principled framework for temporal capacity allocation in diffusion models. By mathematically partitioning the diffusion timeline based on local approximation burden (e.g., path acceleration), CBS significantly improves image synthesis quality—improving FID by ~35% on SiT-XL with CFG relative to naive temporal partitioning—without increasing per-step inference costs.
+                <strong>Complexity-Balanced Splitting (CBS)</strong> is a principled framework for temporal capacity allocation in diffusion models. By mathematically partitioning the diffusion timeline based on local approximation burden (e.g., path acceleration), CBS significantly improves image synthesis quality, improving FID by ~35% on SiT-XL with CFG relative to naive temporal partitioning, without increasing per-step inference costs.
               </p>
             </div>
           </div>
