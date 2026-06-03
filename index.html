@@ -134,7 +134,7 @@
           <img src="static/images/cbs_unified_deep_blue.gif" alt="Animation comparing Naive Temporal Splitting with Complexity-Balanced Splitting" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
           <div class="content has-text-justified" style="margin-top: 2rem;">
             <p class="is-size-5 has-text-grey-dark">
-              <strong>Uniform time-splitting creates localized capacity bottlenecks.</strong> Standard diffusion models deploy a single network uniformly across all timesteps, despite the fact that no individual denoising regime warrants such massive capacity on its own. As demonstrated above, naively splitting the diffusion timeline into equal time intervals ($t=0.33, t=0.67$) forces the middle sub-network to bear a disproportionate share (65.4%) of the generative workload, while the other sub-networks remain severely underutilized.
+              <strong>Uniform time-splitting creates localized capacity bottlenecks.</strong> Standard diffusion models deploy a single network uniformly across all timesteps, despite the fact that no individual denoising regime warrants such massive capacity on its own. As demonstrated above, naively splitting the diffusion timeline into equal time intervals ($t=0.33, t=0.67$) can force one sub-network to bear a disproportionate share (65.4%) of the generative workload, while the others remain severely underutilized.
               <br><br>
               <strong>Complexity-Balanced Splitting (CBS)</strong> addresses this by applying de Boor's equidistribution principle to partition the diffusion timeline into segments of equal approximation burden. By shifting the boundaries to align with the local modeling complexity, CBS ensures each sub-network assumes an equal share of the representational burden. This minimizes the maximal local approximation errors, leading to a more uniformly accurate flow field and improved sample quality.
             </p>
@@ -228,9 +228,9 @@
             <div class="box" style="height: 100%; border-top: 4px solid #10b981; display: flex; flex-direction: column;">
               <h3 class="title is-4 has-text-centered mt-2">2. Path Acceleration</h3>
               <p class="has-text-justified" style="flex-grow: 1;">
-                Alternatively, we can evaluate the geometric complexity of the sampling trajectories induced by the flow field through their second-order time derivative. Using the first derivative (velocity) confounds geometric complexity with traversal speed.
+                A complementary bound can be derived by analyzing the temporal complexity of the sampling trajectories themselves. Classical approximation theory bounds the global error on a curve by its $k$-th derivative: $\|x_t - \hat{x}_t\|_\infty \le C \frac{L_k}{n^k}$. Using $k=1$ (velocity) is insufficient, as a flow field scaled by a constant traverses the same geometric path faster without being harder to model, confounding speed with complexity.
                 <br><br>
-                Instead, we opt to bound the error using the path's acceleration, which effectively filters out the constant-velocity displacement and isolates the curviness of the path:
+                We therefore use $k=2$, the path acceleration, which filters out constant-velocity displacement and isolates the true curviness of the trajectory:
               </p>
               <div class="has-text-centered my-4" style="font-size: 1.25rem;">
                 $$ m(t) = \left\| \frac{d^2 x_t}{dt^2} \right\| $$
