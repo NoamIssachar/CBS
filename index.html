@@ -66,6 +66,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -228,9 +236,9 @@
             <div class="box" style="height: 100%; border-top: 4px solid #10b981; display: flex; flex-direction: column;">
               <h3 class="title is-4 has-text-centered mt-2">2. Path Acceleration</h3>
               <p class="has-text-justified" style="flex-grow: 1;">
-                A complementary bound can be derived by analyzing the temporal complexity of the sampling trajectories themselves. Classical approximation theory bounds the global error on a curve by its $k$-th derivative: $\|x_t - \hat{x}_t\|_\infty \le C \frac{L_k}{n^k}$. Using $k=1$ (velocity) is insufficient, as a flow field scaled by a constant traverses the same geometric path faster without being harder to model, confounding speed with complexity.
+                Alternatively, we can evaluate the geometric complexity of the sampling trajectories induced by the flow field through their second-order time derivative. Using the first derivative (velocity) confounds geometric complexity with traversal speed.
                 <br><br>
-                We therefore use $k=2$, the path acceleration, which filters out constant-velocity displacement and isolates the true curviness of the trajectory:
+                Instead, we opt to bound the error using the path's acceleration, which effectively filters out the constant-velocity displacement and isolates the curviness of the path:
               </p>
               <div class="has-text-centered my-4" style="font-size: 1.25rem;">
                 $$ m(t) = \left\| \frac{d^2 x_t}{dt^2} \right\| $$
