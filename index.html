@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
+
   <meta name="title" content="Complexity-Balanced Diffusion Splitting - Noam Issachar, Dani Lischinski, Raanan Fattal">
   <meta name="description" content="Complexity-Balanced Splitting (CBS) is a principled framework for temporal capacity allocation in diffusion models that distributes the generative workload across specialized sub-networks.">
   <meta name="keywords" content="machine learning, computer vision, AI, diffusion models, generative modeling, network splitting">
@@ -64,6 +64,9 @@
   </noscript>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="static/js/fontawesome.all.min.js"></script>
@@ -128,10 +131,14 @@
     <section class="hero is-small">
       <div class="hero-body">
         <div class="container is-max-desktop has-text-centered">
-          <img src="static/images/cbs_unified_deep_blue.gif" alt="Complexity-Balanced Splitting Conceptual Overview" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
-          <h2 class="subtitle has-text-centered" style="margin-top: 1.5rem; color:#64748b;">
-            <strong>Maximal local errors govern ODE approximation.</strong> CBS partitions the diffusion timeline to optimally distribute the representational workload across the generative process, preventing local errors from compounding.
-          </h2>
+          <img src="static/images/cbs_unified_deep_blue.gif" alt="Animation comparing Naive Temporal Splitting with Complexity-Balanced Splitting" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
+          <div class="content has-text-justified" style="margin-top: 2rem;">
+            <p class="is-size-5 has-text-grey-dark">
+              <strong>Uniform time-splitting creates capacity bottlenecks.</strong> Naively splitting the generative timeline creates inefficiency because no individual denoising regime warrants massive capacity on its own. As demonstrated above, naively splitting the diffusion timeline into equal time intervals ($t=0.33, t=0.67$) forces the middle network to bear a massive disproportionate share (65.4%) of the generative workload, while the other networks remain severely underutilized.
+              <br><br>
+              <strong>Complexity-Balanced Splitting (CBS)</strong> solves this by applying de Boor's equidistribution principle to partition the timeline into segments of equal approximation burden. By dynamically shifting the boundaries, CBS ensures each specialized sub-network assumes an identical ~33.3% share of the representational burden, leading to a more uniformly accurate flow field.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -143,7 +150,7 @@
             <h2 class="title is-3">TL;DR</h2>
             <div class="content has-text-justified">
               <p>
-                <strong>Complexity-Balanced Splitting (CBS)</strong> is a principled framework that replaces monolithic diffusion architectures by distributing the generative workload across specialized sub-networks. By mathematically partitioning the diffusion timeline based on local approximation burden (e.g., path acceleration), CBS significantly improves image synthesis quality (up to <strong>~35% FID improvement</strong>) without increasing per-step inference costs.
+                <strong>Complexity-Balanced Splitting (CBS)</strong> is a principled framework for temporal capacity allocation in diffusion models. By mathematically partitioning the diffusion timeline based on local approximation burden (e.g., path acceleration), CBS significantly improves image synthesis quality—improving FID by ~35% on SiT-XL with CFG relative to naive temporal partitioning—without increasing per-step inference costs.
               </p>
             </div>
           </div>
@@ -164,63 +171,70 @@
         </div>
       </div>
     </section>
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3 has-text-centered">Maximal Local Errors Govern ODE Approximation</h2>
+
+            <div class="has-text-centered" style="margin-top: 2rem; margin-bottom: 2rem;">
+              <img src="static/images/figure1.png" alt="Maximal local errors govern ODE approximation" style="max-width: 80%; border-radius: 8px;" />
+              <p class="is-size-6 has-text-grey mt-3">
+                <em><strong>Figure 1:</strong> Illustration of how maximal local errors govern ODE approximation. Once a large error is encountered, the resulting path diverges from its true course and the misalignment is maintained forward in time, even if the flow is fairly accurate in the subsequent steps.</em>
+              </p>
+            </div>
+
+            <div class="content has-text-justified">
+              <p>
+                When a generative model relies on path-integrated flow fields during sampling, local approximation errors compound severely. Standard training paradigms optimize for the <em>expected</em> error averaged across the entire denoising interval, which fundamentally diverges from minimizing the maximum instantaneous error.
+              </p>
+              <p>
+                By contrast, CBS splits the generation timeline explicitly to bound these peak errors, as the objective of minimizing the maximal error bound is specifically directed toward better sampling quality.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="section has-background-light" id="how-cbs-works">
       <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered">How CBS Works</h2>
+        <h2 class="title is-3 has-text-centered">Tractable Complexity Monitors</h2>
 
         <div class="columns is-centered mt-4 mb-6">
           <div class="column is-10 has-text-centered">
             <p class="is-size-5 has-text-grey-dark">
-              Deploying a single massive network uniformly across the entire generative timeline is inefficient. The generative process shifts from broad structural formation to high-frequency detail refinement. <strong>CBS</strong> dynamically allocates capacity precisely where the generative dynamics are hardest to model.
+              To evenly distribute the representational workload, we need to quantify the local approximation burden of the target flow. We introduce two computable, mathematically grounded monitor functions $m(t)$ to measure this complexity.
             </p>
           </div>
         </div>
 
         <div class="columns is-centered is-multiline">
-          
-          <div class="column is-4">
+
+          <div class="column is-6">
             <div class="box" style="height: 100%; border-top: 4px solid #3b82f6; display: flex; flex-direction: column;">
-              <div class="has-text-centered mb-4 mt-2">
-                <span class="icon is-large" style="color: #3b82f6;">
-                  <i class="fas fa-balance-scale fa-2x"></i>
-                </span>
-              </div>
-              <h3 class="title is-5 has-text-centered">1. Equidistribution</h3>
+              <h3 class="title is-4 has-text-centered mt-2">1. Dirichlet Spectral Energy</h3>
               <p class="has-text-justified" style="flex-grow: 1;">
-                Grounded in <strong>de Boor's Equidistribution Principle</strong>, we treat timeline partitioning as a domain decomposition problem. CBS divides the diffusion timeline into segments of <em>equal approximation burden</em>, ensuring every sub-network faces a comparable workload.
+                Barron's theorem bounds a network's approximation error using the spectral complexity of the target function. Because the instantaneous vector field is too high-dimensional to assess directly, we obtain a formal bound on $C_{v_t}$ based on the vector field's global spatial variation, measured by its Dirichlet energy.
+                <br><br>
+                This establishes a direct, computable monitor function based on the global spatial roughness of the flow and the expected approximation error for a parameter budget $n$:
               </p>
+              <div class="has-text-centered my-4" style="font-size: 1.25rem;">
+                $$ m(t) = K' \frac{E_D(v_t)}{n} $$
+              </div>
             </div>
           </div>
 
-          <div class="column is-4">
+          <div class="column is-6">
             <div class="box" style="height: 100%; border-top: 4px solid #10b981; display: flex; flex-direction: column;">
-              <div class="has-text-centered mb-4 mt-2">
-                <span class="icon is-large" style="color: #10b981;">
-                  <i class="fas fa-chart-area fa-2x"></i>
-                </span>
-              </div>
-              <h3 class="title is-5 has-text-centered">2. Tractable Monitors</h3>
-              <p class="has-text-left">
-                To measure this local approximation burden, we introduce two robust monitor functions:
-              </p>
-              <ul class="mt-3" style="list-style-type: disc; margin-left: 1.5rem; font-size: 0.95rem; flex-grow: 1;">
-                <li class="mb-2"><strong>Dirichlet Energy:</strong> A spatial measure linking rapid flow variations to frequency complexity.</li>
-                <li><strong>Path Acceleration:</strong> A geometric measure capturing the "curviness" of the sampling trajectories.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="column is-4">
-            <div class="box" style="height: 100%; border-top: 4px solid #8b5cf6; display: flex; flex-direction: column;">
-              <div class="has-text-centered mb-4 mt-2">
-                <span class="icon is-large" style="color: #8b5cf6;">
-                  <i class="fas fa-bolt fa-2x"></i>
-                </span>
-              </div>
-              <h3 class="title is-5 has-text-centered">3. Search-Free Splitting</h3>
+              <h3 class="title is-4 has-text-centered mt-2">2. Path Acceleration</h3>
               <p class="has-text-justified" style="flex-grow: 1;">
-                By pre-computing the cumulative complexity using a highly lightweight auxiliary model (e.g., trained for just 50K iterations on 10% of the data), CBS yields the optimal boundaries automatically—eliminating the need for computationally expensive heuristic searches.
+                Alternatively, we can evaluate the geometric complexity of the sampling trajectories induced by the flow field through their second-order time derivative. Using the first derivative (velocity) confounds geometric complexity with traversal speed.
+                <br><br>
+                Instead, we opt to bound the error using the path's acceleration, which effectively filters out the constant-velocity displacement and isolates the curviness of the path:
               </p>
+              <div class="has-text-centered my-4" style="font-size: 1.25rem;">
+                $$ m(t) = \left\| \frac{d^2 x_t}{dt^2} \right\| $$
+              </div>
             </div>
           </div>
 
@@ -230,7 +244,7 @@
       <div class="container is-max-desktop">
         <h2 class="title is-3 has-text-centered">Quantitative Results (ImageNet-256)</h2>
         <p class="has-text-centered" style="margin-bottom:1.5rem; color:#64748b;">
-          Evaluation of Scalable Interpolant Transformers (SiT) on latent ImageNet-256. CBS yields consistent improvements across all capacities, achieving superior FID while <strong>strictly maintaining the identical active parameter count and per-step inference cost</strong> as the monolithic baseline.
+          Evaluation of Scalable Interpolant Transformers (SiT) on latent ImageNet-256. CBS yields consistent improvements across all capacities, achieving superior FID while strictly maintaining the identical active parameter count and per-step inference cost as the monolithic baseline.
         </p>
 
         <div class="table-container">
@@ -337,7 +351,7 @@
                 <td style="text-align: center;">0.72</td>
                 <td style="text-align: center;">0.56</td>
               </tr>
-              
+
               <tr>
                 <td colspan="11" style="background-color: #f1f5f9; height: 10px;"></td>
               </tr>
@@ -395,7 +409,7 @@
           </button>
         </div>
         <pre id="bibtex-code"><code>@misc{issachar2026complexity,
-      title={Complexity-Balanced Diffusion Splitting}, 
+      title={Complexity-Balanced Diffusion Splitting},
       author={Noam Issachar and Dani Lischinski and Raanan Fattal},
       year={2026},
       url={https://arxiv.org/abs/YOUR_ARXIV_ID}
