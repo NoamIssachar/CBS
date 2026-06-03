@@ -603,80 +603,111 @@ code {
   .hero-body {
     padding: 2rem 1rem;
   }
-  
+
   .publication-header .hero-body {
     padding: 3rem 1rem 2rem;
   }
-  
+
   .publication-title {
-    font-size: 2.5rem !important;
+    font-size: 2rem !important;
     line-height: 1.2 !important;
     margin-bottom: 1.5rem !important;
   }
-  
+
   .publication-authors {
+    font-size: 0.95rem !important;
+  }
+
+  /* Stack monitor boxes vertically */
+  .column.is-6 {
+    width: 100% !important;
+  }
+
+  /* Reduce oversized teaser text */
+  .is-size-5 {
     font-size: 1rem !important;
   }
-  
+
+  /* Table: horizontal scroll with min-width so numbers stay readable */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-container table {
+    min-width: 700px;
+    font-size: 0.8rem;
+  }
+
+  /* Boxes: remove fixed height so they don't clip when stacked */
+  .box[style*="height: 100%"] {
+    height: auto !important;
+  }
+
   .button {
     margin: 0.25rem !important;
     font-size: 0.875rem !important;
-    padding: 0.75rem 1rem !important;
+    padding: 0.6rem 0.9rem !important;
   }
-  
+
   .more-works-container {
     bottom: 2rem;
     right: 1rem;
     top: auto;
   }
-  
+
   .more-works-btn {
     padding: 0.6rem 1rem;
     font-size: 0.8rem;
   }
-  
+
   .more-works-dropdown {
     width: calc(100vw - 2rem);
     right: -1rem;
     bottom: calc(100% + 0.5rem);
     top: auto;
   }
-  
+
   .results-carousel .item {
     margin: 0.5rem;
     padding: 1rem;
   }
-  
+
   .teaser .hero-body {
     padding: 1rem;
   }
-  
+
   .content.has-text-justified {
     font-size: 1rem;
+  }
+
+  /* Section padding on mobile */
+  .section {
+    padding: 2rem 1rem;
   }
 }
 
 @media screen and (max-width: 480px) {
   .publication-title {
-    font-size: 2rem !important;
+    font-size: 1.6rem !important;
   }
-  
+
   .hero-body {
     padding: 1.5rem 0.75rem;
   }
-  
+
   .more-works-container {
     position: fixed;
     bottom: 2rem;
     right: 1rem;
     z-index: 1000;
   }
-  
+
   .more-works-btn {
     padding: 0.5rem 0.75rem;
     font-size: 0.75rem;
   }
-  
+
   .more-works-dropdown {
     position: absolute;
     bottom: calc(100% + 0.5rem);
@@ -684,15 +715,23 @@ code {
     width: calc(100vw - 2rem);
     max-width: 90vw;
   }
-  
-  .link-block {
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-  
-  .button {
-    width: 100%;
+
+  /* Publication link buttons: wrap in a flex row that wraps */
+  .publication-links {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .link-block {
+    display: inline-block;
+    margin: 0;
+  }
+
+  /* Figures: full width on small screens */
+  img[style*="max-width: 80%"] {
+    max-width: 100% !important;
   }
 }
 
